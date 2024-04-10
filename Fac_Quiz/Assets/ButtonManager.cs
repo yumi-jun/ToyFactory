@@ -16,6 +16,22 @@ public class ButtonManager : MonoBehaviour
     public TMP_InputField password;
 
 
+    private WebRequestManager _webRequestManager;
+    public void Start()
+    {
+        _webRequestManager = FindObjectOfType<WebRequestManager>();
+    }
+
+
+    public void AddMember()
+    {
+        if (name.text == null && name.text == null)
+        {
+            Debug.Log("데이터가 없다.");
+            return;
+        }
+        _webRequestManager.SendLoginDataToServer(name.text,password.text);
+    }
     public void getPerson()
     {
         StartCoroutine(RandomRequest());
@@ -41,15 +57,16 @@ public class ButtonManager : MonoBehaviour
     {
         string personJson = parseInput();
         
-        Debug.Log(personJson);
+        Debug.Log("json : "+personJson);
         
-        UnityWebRequest webreq = UnityWebRequest.PostWwwForm(add_url,personJson);
+        UnityWebRequest webreq = UnityWebRequest.Put(add_url,personJson);
         
-        //set the uploaded data
+        //set the uploaded data //스트링으로 넘기면 json 구성이 깨지기 때문에 byte로 변환 후 파일로 업로드해준다
         byte[] jsonInBytes = new System.Text.UTF8Encoding().GetBytes(personJson);
-        Debug.Log(jsonInBytes.Length);
-        webreq.uploadHandler = new UploadHandlerRaw(jsonInBytes);
         
+        webreq.uploadHandler = new UploadHandlerRaw(jsonInBytes);
+        webreq.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+         
         // set the header 
         
         webreq.SetRequestHeader("Content-Type","application/json");
@@ -64,7 +81,7 @@ public class ButtonManager : MonoBehaviour
                 Debug.LogError(("Error: "+webreq.error));
                 break;
             case UnityWebRequest.Result.Success:
-                Debug.Log("Member sent succesfully");
+                Debug.Log("Member sent succesfully"+webreq.downloadHandler.text);
                
                 break;
         }
@@ -104,14 +121,5 @@ public class ButtonManager : MonoBehaviour
         name.text = member.getusername();
         password.text = member.getpassword();
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

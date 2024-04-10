@@ -882,7 +882,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1239499785}
         m_TargetAssemblyTypeName: ButtonManager, Assembly-CSharp
-        m_MethodName: addPerson
+        m_MethodName: AddMember
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1076,6 +1076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1239499786}
   - component: {fileID: 1239499785}
+  - component: {fileID: 1239499787}
   m_Layer: 0
   m_Name: ButtonManager
   m_TagString: Untagged
@@ -1112,6 +1113,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1239499787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239499784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79662e65272adea4c95aa50f7ad2c697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverURL: http://localhost:80/api/endpoint
+  jsonDataToSend: '{"username":"exampleUser","password":"examplePassword"}'
 --- !u!1 &1332034237
 GameObject:
   m_ObjectHideFlags: 0
