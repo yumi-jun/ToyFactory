@@ -12,11 +12,14 @@ public class ButtonManager : MonoBehaviour
     // Start is called before the first frame update
 
     private string add_url = "http://localhost:80/member?";
-    public TMP_InputField name;
+    public TMP_InputField username;
     public TMP_InputField password;
+    public TMP_InputField loginId;
+
+    public TMP_InputField loginId_login;
+    public TMP_InputField password_login;
 
 
-    
     
     private WebRequestManager _webRequestManager;
     public void Start()
@@ -27,12 +30,12 @@ public class ButtonManager : MonoBehaviour
 
     public void SignUpMember()
     {
-        if (name.text == null && name.text == null)
+        if (username.text == null && password.text == null&& loginId.text == null)
         {
             Debug.Log("데이터가 없다.");
             return;
         }
-        _webRequestManager.SendDataToServer(name.text,password.text);
+        _webRequestManager.SendDataToServer(loginId.text,username.text,password.text);
     }
 
     public void getMemberList()
@@ -42,7 +45,7 @@ public class ButtonManager : MonoBehaviour
 
     public void LoginMember()
     {
-        _webRequestManager.FindDataToServer(name.text,password.text);
+        _webRequestManager.FindDataToServer(loginId_login.text,password_login.text);
     }
    
 }

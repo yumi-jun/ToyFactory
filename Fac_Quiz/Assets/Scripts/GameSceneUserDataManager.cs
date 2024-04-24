@@ -10,13 +10,26 @@ using UnityEngine.UI;
 public class UserData
 {
     public int id;
+    public string userlogin;
     public string username;
     public string password;
 }
 public class GameSceneUserDataManager: MonoBehaviour
 {
     
-    private static GameSceneUserDataManager instance;
+    private static GameSceneUserDataManager instance=new GameSceneUserDataManager();
+
+    private UserData userData;
+
+    private List<String> QuestionData;
+    
+    private GameSceneUserDataManager() {
+        // 생성자는 외부에서 호출못하게 private 으로 지정해야 한다.
+    }
+
+    public static GameSceneUserDataManager Instance() {
+        return instance;
+    }
 
     void Awake()
     {
@@ -39,14 +52,33 @@ public class GameSceneUserDataManager: MonoBehaviour
 
     public void setJsonData(String json)
     {
-        UserData userData = JsonUtility.FromJson<UserData>(json);
+        userData = JsonUtility.FromJson<UserData>(json);
+        
+        Debug.Log(userData);
         
         Debug.Log("ID: " + userData.id);
+        Debug.Log("loginid"+userData.userlogin);
         Debug.Log("Username: " + userData.username);
         Debug.Log("Password: " + userData.password);
 
        
         
+    }
+
+    public UserData GetUserdata()
+    {
+        return userData;
+    }
+
+    public void setQuizData(List<String> str)
+    {
+        QuestionData = str;
+
+    }
+
+    public List<String> getQuizData()
+    {
+        return QuestionData;
     }
     
 

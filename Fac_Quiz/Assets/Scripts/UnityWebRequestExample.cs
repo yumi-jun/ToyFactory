@@ -7,11 +7,11 @@ using UnityEngine.Networking;
 public class UnityWebRequestExample : MonoBehaviour
 {
     // Start is called before the first frame update
-    public string serverURL = "http://localhost:80/member/signup";
+    public string serverURL = "http://localhost:80/members/signup";
 
     private void Start()
     {
-        SendDataToServer("sdf","sdf");
+        
     }
 
     public void SendDataToServer(string username, string password)
