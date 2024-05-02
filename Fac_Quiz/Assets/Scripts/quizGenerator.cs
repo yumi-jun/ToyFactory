@@ -1,45 +1,64 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
-
-/*
- * 1. »õ ÄûÁî ¹öÆ°
- * 2. ÄûÁî »ı¼º Äµ¹ö½º
- *  a. ÆÄÀÏ ¼±ÅÃ ¹öÆ°
- *  b. ÄûÁî À¯Çü ¼±ÅÃ Ã¼Å©¹Ú½º È¤Àº µå·Ó¹Ú½º
- *  c. ¹®Á¦ °³¼ö ¼±ÅÃ inputfield
- *  d. ¼Ä¼º ¹öÆ° => gptÇÑÅ× ¼³Á¤ °ªµéÀÌ¶û °­³ë ÅØ½ºÆ® Àü´Ş
- * 3. °á°ú ÅØ½ºÆ® ¹Ş±â -> ÀÌ°Å°¡Áö°í ÄûÁî ui¿¡ ³Ö´Â°Ç ´Ù¸¥ ºĞµéÀÌ??
- */
+using UnityEngine.UI;
+using TMPro;
+using System.IO;
 
 
 public class quizGenerator : MonoBehaviour
 {
     public string inputLectureNoteStr;
     private OpenAIAPI openAIApi;
+    [SerializeField] TMP_InputField quizNum;
+    private string gptKey;
+
 
     private void Start()
     {
-        //Àú¹ø¿¡ path¿¡¼­ key °¡Áö°íÀÖ´Â ÅØ½ºÆ® ÆÄÀÏ °¡Á®¿À´Â ÄÚµå Ã£¾Æ¼­ ´Ù½Ã ½á¸Ô±â
-        openAIApi = new OpenAIAPI("apikey here");
+        FileInfo fileInfo = new FileInfo("./chatGPT_API_Key.txt");
+
+        if (fileInfo.Exists)
+        {
+            StreamReader reader = new StreamReader("./chatGPT_API_Key.txt");
+            gptKey = reader.ReadToEnd();
+            reader.Close();
+        }
+        else {
+            Debug.LogError("íŒŒì¼ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤");
+        }
+
+        openAIApi = new OpenAIAPI(gptKey);
     }
 
     public async void makeQuiz() {
+
+        if (string.IsNullOrWhiteSpace(inputLectureNoteStr)) {
+            Debug.Log("ê°•ì˜ë…¸íŠ¸ë¥¼ ì„ íƒí•´ì£¼ì„¸ìš”.");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(quizNum.text)) {
+            Debug.Log("ìƒì„±ë  ë¬¸ì œì˜ ê°œìˆ˜ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+            return;
+        }
+
+        Debug.Log("í€´ì¦ˆ ê°œìˆ˜: " + quizNum.text);
+
         var chat = openAIApi.Chat.CreateConversation();
         chat.Model = Model.ChatGPTTurbo;
-        chat.RequestParameters.Temperature = 0; //°ªÀÌ ³ôÀ» ¼ö·Ï ´äÀÌ Ã¢ÀÇÀûÀ¸·Î ³ª¿ÀÁö¸¸ ¸®½ºÅ©°¡ Å­
+        chat.RequestParameters.Temperature = 0; //ê°’ì´ ë†’ì„ ìˆ˜ë¡ ë‹µì´ ì°½ì˜ì ìœ¼ë¡œ ë‚˜ì˜¤ì§€ë§Œ ë¦¬ìŠ¤í¬ê°€ í¼
 
-        chat.AppendSystemMessage("gpt¿¡¼¼ ½Ã½ºÅÛÀ¸·Î¼­ÀÇ ¿ªÇÒ°ú ¹«¾ùÀ» ÇØ¾ßÇÏ´ÂÁö ¼¼ºÎÀûÀ¸·Î ¼³¸í");
+        chat.AppendSystemMessage("ë‚˜ëŠ” ëŒ€í•™êµ ê°•ì˜ë…¸íŠ¸ì˜ ë‚´ìš©ì„ í€´ì¦ˆë¥¼ í’€ë©´ì„œ ê³µë¶€í•˜ê³  ì‹¶ì–´. ë„ˆëŠ” ë‚´ê°€ ì œì‹œí•œ ì§€ë¬¸ì„ ë°”íƒ•ìœ¼ë¡œ í€´ì¦ˆë¥¼ ìƒì„±í•´ì£¼ë©´ ë¼. ë„ˆì˜ ëŒ€ë‹µì—ëŠ” ì§ˆë¬¸, ë‹µ, ë¬¸ì œì˜ í•´ì„¤ ì´ 3ê°€ì§€ê°€ í•„ìˆ˜ë¡œ í¬í•¨ë˜ì–´ì•¼ í•´. ê·¸ë¦¬ê³  ë‚´ê°€ ë§Œë“¤ì–´ë‹¬ë¼ í•œ ë¬¸ì œ ê°œìˆ˜ ë§Œí¼ í•„ìˆ˜ë¡œ ë§Œë“¤ì–´ì•¼ í•´."); //gptì—ì„¸ ì‹œìŠ¤í…œìœ¼ë¡œì„œì˜ ì—­í• ê³¼ ë¬´ì—‡ì„ í•´ì•¼í•˜ëŠ”ì§€ ì„¸ë¶€ì ìœ¼ë¡œ ì„¤ëª…
 
-        //À¯Àú¶û ¾î½Ã½ºÅÏÆ® ´ëÈ­ ¿¹½Ã
-        chat.AppendUserInput("");
-        chat.AppendExampleChatbotOutput("");
+        //ìœ ì €ë‘ ì–´ì‹œìŠ¤í„´íŠ¸ ëŒ€í™” ì˜ˆì‹œ
+        //chat.AppendUserInput("");
+        //chat.AppendExampleChatbotOutput("");
 
-        //½ÇÁ¦·Î Áú¹®ÇÏ´Â ºÎºĞ
-        chat.AppendUserInput("");
+        //ì‹¤ì œë¡œ ì§ˆë¬¸í•˜ëŠ” ë¶€ë¶„
+        chat.AppendUserInput( inputLectureNoteStr + " ì´ ê¸€ì„ ë°”íƒ•ìœ¼ë¡œ ë¬¸ì œ " +quizNum.text+ "ê°œë¥¼ ë§Œë“¤ì–´ì¤˜. ë¬¸ì œì˜ ìœ í˜•ì€ 5ì§€ì„ ë‹¤í˜•ì´ê³  ë‹µì€ 1ê°œì—¬ì•¼í•´.");
         string response = await chat.GetResponseFromChatbotAsync();
         Debug.Log(response);
 

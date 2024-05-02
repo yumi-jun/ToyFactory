@@ -9,7 +9,7 @@ using iTextSharp.text;
 public class iTextSharpConverter : MonoBehaviour
 {
     string result = string.Empty;
-
+    [SerializeField] GameObject quizMaker;
 
     public void convertPdfToText(string path) {
         PdfReader pdfReader = new PdfReader(path.ToString());
@@ -21,5 +21,6 @@ public class iTextSharpConverter : MonoBehaviour
 
         Debug.Log(result);
         GUIUtility.systemCopyBuffer = result;
+        quizMaker.GetComponent<quizGenerator>().inputLectureNoteStr = result;
     }
 }
