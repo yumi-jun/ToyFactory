@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class UnityWebRequestExample : MonoBehaviour
 {
     // Start is called before the first frame update
-    public string serverURL = "http://localhost:80/members/signup";
+    private string serverURL = "http://localhost:1234/members";
 
     private void Start()
     {

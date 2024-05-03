@@ -67,6 +67,7 @@ public class QuizManager : MonoBehaviour
         {
             Debug.LogError("QnA 리스트가 비어 있습니다.");
             SceneLoader.Instance().LoadQuizScene("GameFin");
+            return;
         }
         
         currentQuestion = Random.Range(0, QnA.Count);

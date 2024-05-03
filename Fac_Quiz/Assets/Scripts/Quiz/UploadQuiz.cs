@@ -23,7 +23,7 @@ public class QuizEntity
 public class UploadQuiz : MonoBehaviour
 {
 
-    public string serverURL = "http://localhost:80/upload";
+    private string serverURL = "http://localhost:1234/quiz";
 
     public TMP_InputField quizQuesInput;
 
@@ -48,7 +48,7 @@ public class UploadQuiz : MonoBehaviour
         String quizQues = quizQuesInput.text;
         
         // "-" 기준으로 split 하여 배열에 저장
-        List<string> questionList = quizQues.Split(new[] { "-" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        List<string> questionList = quizQues.Split(new[] { "Q." }, StringSplitOptions.RemoveEmptyEntries).ToList();
         Debug.Log(questionList.Count);
 
         foreach (var q in questionList)
@@ -129,7 +129,7 @@ public class UploadQuiz : MonoBehaviour
 
     public void GetUserQuiz()
     {
-        string serverURL = "http://localhost:80/quiz/user/" +
+        string serverURL = "http://localhost:1234/quiz/" +
                            GameSceneUserDataManager.Instance().GetUserdata().id;
         Debug.Log(serverURL);
         
