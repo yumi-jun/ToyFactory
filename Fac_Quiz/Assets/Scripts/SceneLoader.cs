@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,5 +38,9 @@ public class SceneLoader : MonoBehaviour
     public void LoadQuizScene()
     {
         SceneManager.LoadScene("QuizScene");
+    }
+    public void LoadQuizScene(String scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 }

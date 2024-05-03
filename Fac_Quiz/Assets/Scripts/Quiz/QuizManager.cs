@@ -23,9 +23,21 @@ public class QuizManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        QnA = new List<QustionAndAnswers>(); // QnA 리스트 초기화
+        AddQuestions();
         generateQuestion();
+        
     }
 
+    public void AddQuestions()
+    {
+        List<String> ql = GameSceneUserDataManager.Instance().getQuizData();
+
+        foreach (String q in ql)
+        {
+            QnA.Add(new QustionAndAnswers() { Question = q.ToString() ,Answers = new string[] { "답변 1", "답변 2" }, CorrectAnswer = 1 });
+        }
+    }
     public void Correct()
     {
         generateQuestion();
@@ -36,7 +48,7 @@ public class QuizManager : MonoBehaviour
         for (int i = 0; i < options.Length; i++)
         {
             options[i].GetComponent<AnswerScript>().isCorrect = false;
-            options[i].transform.GetChild(0).GetComponent<Text>().text = QnA[currentQuestion].Answers[i];
+            options[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = QnA[currentQuestion].Answers[i];
             
             if(QnA[currentQuestion].CorrectAnswer==i+1)
             {
@@ -47,16 +59,20 @@ public class QuizManager : MonoBehaviour
 
     void generateQuestion()
     {
-
-        List<String> ql = GameSceneUserDataManager.Instance().getQuizData();
         
+        Debug.Log(QnA.Count);
         
-        for (int i = 0; i <ql.Count ; i++)
+        // QnA 리스트가 비어 있는 경우
+        if (QnA.Count == 0)
         {
-            QnA[i].Question = ql[i];
+            Debug.LogError("QnA 리스트가 비어 있습니다.");
+            SceneLoader.Instance().LoadQuizScene("GameFin");
         }
         
         currentQuestion = Random.Range(0, QnA.Count);
+
+        // 현재 질문이 리스트의 범위를 벗어나지 않도록 보정
+        currentQuestion = Mathf.Clamp(currentQuestion, 0, QnA.Count - 1);
 
         QuestionTxt.text = QnA[currentQuestion].Question;
         SetAnswer();
