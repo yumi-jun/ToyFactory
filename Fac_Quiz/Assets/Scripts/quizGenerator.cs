@@ -16,8 +16,8 @@ public class quizGenerator : MonoBehaviour
     [SerializeField] TMP_InputField quizNum;
     [SerializeField] TMP_Dropdown quizDropdown;
     private string gptKey, quizType;
-
-
+    private string response;
+    
     private void Start()
     {
         FileInfo fileInfo = new FileInfo("./chatGPT_API_Key.txt");
@@ -75,11 +75,19 @@ public class quizGenerator : MonoBehaviour
             chat.AppendUserInput(inputLectureNoteStr + " 이 글을 바탕으로 먼저 답이 1개인 5지선다형 문제 " + (int.Parse(quizNum.text))/2 + "개를 만들어주고, 이어서 OX형 문제 " + (int.Parse(quizNum.text)-(int.Parse(quizNum.text))/2) + "개를 만들어줘. 문제 개수 꼭 지키고 해설도 꼭 써줘. 문제는 Q로만 표시하고 번호는 쓰지 말아줘.");
         }
 
-        string response = await chat.GetResponseFromChatbotAsync();
+        response = await chat.GetResponseFromChatbotAsync();
         Debug.Log(response);
+        
+        GameSceneUserDataManager.Instance().SetQuizString(response);
+        
 
         foreach (ChatMessage msg in chat.Messages) {
             Debug.Log($"{msg.Role}: {msg.TextContent}");
         }
+    }
+
+    public string GetQuizText()
+    {
+        return response;
     }
 }

@@ -48,9 +48,8 @@ public class QuizManager : MonoBehaviour
                 // 질문일 경우
                 currentQuestion = line;
             }
-            else if (line.StartsWith("a.") || line.StartsWith("b.") || line.StartsWith("c."))
+            else if (line.StartsWith("a)") || line.StartsWith("b)") || line.StartsWith("c)")|| line.StartsWith("d)")|| line.StartsWith("e)"))
             {
-                Debug.Log("hh");
                 // 정답 옵션일 경우
                 currentOptions = line + "\n";
                 options.Add(currentOptions);
@@ -91,7 +90,13 @@ public class QuizManager : MonoBehaviour
             {
                 ca =4;
             }
-            QnA.Add(new QustionAndAnswers() { Question =questions[i] ,Answers = new string[] { options[3*i+0], options[3*i+1],options[3*i+2] }, CorrectAnswer = ca });
+            else if (answers[i].Contains("e"))
+            {
+                ca =5;
+            }
+            
+            
+            QnA.Add(new QustionAndAnswers() { Question =questions[i] ,Answers = new string[] { options[5*i+0], options[5*i+1],options[5*i+2], options[5*i+3],options[5*i+4] }, CorrectAnswer = ca });
         }
 
 

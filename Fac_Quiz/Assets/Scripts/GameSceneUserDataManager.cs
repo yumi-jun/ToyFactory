@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,8 @@ public class GameSceneUserDataManager: MonoBehaviour
     private UserData userData;
 
     private List<String> QuestionData;
-    
+
+    private String QuizData;
     private GameSceneUserDataManager() {
         // 생성자는 외부에서 호출못하게 private 으로 지정해야 한다.
     }
@@ -72,8 +74,22 @@ public class GameSceneUserDataManager: MonoBehaviour
 
     public void setQuizData(List<String> str)
     {
+        
+        
         QuestionData = str;
+        
 
+    }
+
+    public void SetQuizString(String str)
+    {
+        QuizData = str;
+    }
+
+    public String GetQuizString()
+    {
+        Debug.Log("quiz : "+QuizData);
+        return QuizData;
     }
 
     public List<String> getQuizData()

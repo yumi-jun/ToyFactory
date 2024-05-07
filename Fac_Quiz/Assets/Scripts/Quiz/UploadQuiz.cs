@@ -25,6 +25,8 @@ public class UploadQuiz : MonoBehaviour
 
     private string serverURL = "http://localhost:1234/quiz";
 
+    private quizGenerator _quizGenerator;
+    
     public TMP_InputField quizQuesInput;
 
     private int userid;
@@ -35,6 +37,7 @@ public class UploadQuiz : MonoBehaviour
     void Start()
     {
         userid = GameSceneUserDataManager.Instance().GetUserdata().id;
+        _quizGenerator = FindObjectOfType<quizGenerator>();
     }
 
     // Update is called once per frame
@@ -45,7 +48,15 @@ public class UploadQuiz : MonoBehaviour
 
     public void StartQuiz()
     {
-        String quizQues = quizQuesInput.text;
+
+        if (GameSceneUserDataManager.Instance().GetQuizString() == null)
+        {
+            Debug.Log("text is null");
+            return;
+        }
+        
+        
+        String quizQues = GameSceneUserDataManager.Instance().GetQuizString();
         
         // "-" 기준으로 split 하여 배열에 저장
         List<string> Lists = quizQues.Split(new[] { "\n","\r" }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -62,8 +73,8 @@ public class UploadQuiz : MonoBehaviour
         
         
         
-        SceneLoader.Instance().LoadQuizScene();
-        GameSceneUserDataManager.Instance().setQuizData(Lists);
+       SceneLoader.Instance().LoadQuizScene();
+       GameSceneUserDataManager.Instance().setQuizData(Lists);
         
         
 

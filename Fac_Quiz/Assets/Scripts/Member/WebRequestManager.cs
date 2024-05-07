@@ -7,6 +7,7 @@ using UnityEngine;
 
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class WebRequestManager : MonoBehaviour
 {
@@ -128,8 +129,8 @@ public class WebRequestManager : MonoBehaviour
             
             Debug.Log(jsonResponse);
             
-            FindObjectOfType<GameSceneUserDataManager>().setJsonData(jsonResponse);
-            FindObjectOfType<SceneLoader>().LoadNextScene();
+            GameSceneUserDataManager.Instance().setJsonData(jsonResponse);
+            SceneLoader.Instance().LoadQuizScene("factory_asset");
             // 성공적으로 요청을 수행한 경우의 처리
         }
         else

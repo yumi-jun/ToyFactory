@@ -27,7 +27,7 @@ public class SceneLoader : MonoBehaviour
         else
         {
             // 이미 인스턴스가 존재하면 이전 인스턴스를 파괴
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
     public void LoadNextScene()
@@ -38,6 +38,11 @@ public class SceneLoader : MonoBehaviour
     public void LoadQuizScene()
     {
         SceneManager.LoadScene("QuizScene");
+    }
+    
+    public void LoadFactoryScene()
+    {
+        SceneManager.LoadScene("FactoryScene");
     }
     public void LoadQuizScene(String scene)
     {
