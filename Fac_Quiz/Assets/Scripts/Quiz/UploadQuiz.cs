@@ -48,6 +48,7 @@ public class UploadQuiz : MonoBehaviour
         String quizQues = quizQuesInput.text;
         
         // "-" 기준으로 split 하여 배열에 저장
+        List<string> Lists = quizQues.Split(new[] { "\n","\r" }, StringSplitOptions.RemoveEmptyEntries).ToList();
         List<string> questionList = quizQues.Split(new[] { "Q." }, StringSplitOptions.RemoveEmptyEntries).ToList();
         Debug.Log(questionList.Count);
 
@@ -57,8 +58,12 @@ public class UploadQuiz : MonoBehaviour
         }
         
         
+        // 각 질문, 정답 옵션, 정답을 저장할 리스트
+        
+        
+        
         SceneLoader.Instance().LoadQuizScene();
-        GameSceneUserDataManager.Instance().setQuizData(questionList);
+        GameSceneUserDataManager.Instance().setQuizData(Lists);
         
         
 
