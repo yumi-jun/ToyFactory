@@ -14,6 +14,7 @@ public class openFile : MonoBehaviour
 
         parsedFilePath = paths[0].Split('\\');
         selectedFileTitle.GetComponent<TextMeshProUGUI>().text = "파일 이름: " + parsedFilePath[parsedFilePath.Length-1];
+        GameSceneUserDataManager.Instance().setFileName(parsedFilePath[parsedFilePath.Length - 1]);
 
         converter.GetComponent<iTextSharpConverter>().convertPdfToText(paths[0]);
     }
