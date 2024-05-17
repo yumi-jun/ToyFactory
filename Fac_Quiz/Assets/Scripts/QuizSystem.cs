@@ -57,7 +57,9 @@ public class QuizSystem : MonoBehaviour
     {
         quizes[panelNum].gameObject.SetActive(false);
         if (++panelNum <= quizes.Count - 1)
+        {
             quizes[panelNum].gameObject.SetActive(true);
+        }
         else //마지막 퀴즈를 풀었을 때
         {
             isLastQuiz = true;

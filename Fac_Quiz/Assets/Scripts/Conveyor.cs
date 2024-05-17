@@ -54,26 +54,29 @@ public class Conveyor : MonoBehaviour
     }
 
     //장난감 획득
-    public void GetToy()
+    public void GetToy(GameObject toy)
     {
         if (currentToy != null)
         {
-            Destroy(currentToy);
-            currentToy = null;
+            Destroy(toy);
             mat.SetFloat("_Speed", 0);
-            isMoving = false;
             toyNum++;
             toyStateText.text = toyNum + "/" + quizSystem.GetTargetToyNum();
-        }
 
-        if (quizSystem.GetIsLastQuiz())
-        {
-            if (toyNum == quizSystem.GetTargetToyNum())
-                Debug.Log("성공!");
-            else
-                Debug.Log("실패!");
-        }
-        
+            if (toy == currentToy)
+            {
+                currentToy = null;
+                isMoving = false;
+
+                if (quizSystem.GetIsLastQuiz())
+                {
+                    if (toyNum == quizSystem.GetTargetToyNum())
+                        Debug.Log("성공!");
+                    else
+                        Debug.Log("실패!");
+                }
+            }
+        }        
     }
 
     public int GetToyNum()

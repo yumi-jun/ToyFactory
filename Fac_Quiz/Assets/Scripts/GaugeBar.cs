@@ -29,6 +29,7 @@ public class GaugeBar : MonoBehaviour
             slider.value = 0f;
             MakeToy();
         }
+
     }
 
     public void IncreaseGauge(float gaugeIncrease)

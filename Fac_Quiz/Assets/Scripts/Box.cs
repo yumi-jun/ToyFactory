@@ -21,7 +21,7 @@ public class Box : MonoBehaviour
     {
         if (other.tag == "Toy") 
         {
-            conveyor.GetToy();
+            conveyor.GetToy(other.gameObject);
         }
         
     }
