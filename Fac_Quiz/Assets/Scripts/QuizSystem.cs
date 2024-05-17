@@ -26,7 +26,7 @@ public class QuizSystem : MonoBehaviour
     [SerializeField] GameObject oxPrefab;
 
     [SerializeField]
-    private int targetToyNum; //ÄûÁî ¼ö¿¡ µû¶ó ´Ş¶óÁü! Áö±İÀº 9¹®Á¦´Ï±î 3¹®Á¦¿¡ ÇÏ³ª°¡ »ı±â¹Ç·Î 3°³!
+    private int targetToyNum; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¶ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 9ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ 3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ 3ï¿½ï¿½!
 
     // Start is called before the first frame update
     void Start()
@@ -69,7 +69,7 @@ public class QuizSystem : MonoBehaviour
         {
             quizes[panelNum].gameObject.SetActive(true);
         }
-        else //¸¶Áö¸· ÄûÁî¸¦ Ç®¾úÀ» ¶§
+        else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î¸¦ Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         {
             isLastQuiz = true;
         }
@@ -77,7 +77,7 @@ public class QuizSystem : MonoBehaviour
 
     public void MakeQuiz()
     {
-        //ÀÚµ¿À¸·Î quiz ¸¸µé±â
+        //ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ quiz ï¿½ï¿½ï¿½ï¿½ï¿½
         if (qna == null)
             return;
 
@@ -86,21 +86,24 @@ public class QuizSystem : MonoBehaviour
             for (int i = 0; i < qna.Count; i++)
             {
                 GameObject newQuiz = Instantiate(multiplePrefab, transform);
-                //quiz question ÁöÁ¤
+                //quiz question ï¿½ï¿½ï¿½ï¿½
                 newQuiz.transform.GetChild(0).GetComponent<TMP_Text>().text = qna[i].Question;
-                //quiz answer ÁöÁ¤
+                //quiz answer ï¿½ï¿½ï¿½ï¿½
                 for (int j = 0; j < qna[i].Answers.Length; j++)
                 {
                     Transform currentOption = newQuiz.transform.GetChild(1).GetChild(j);
-                    currentOption.GetComponent<TMP_Text>().text = qna[i].Answers[j];
+                    Debug.Log("ë¬¸ì œ ë²ˆí˜¸: " + i + " ë‹µ ë²ˆí˜¸: " + j );
+                    Debug.Log("ìƒì„±ë  ì˜µì…˜: " + qna[i].Answers[j]);
+                    Debug.Log("ì˜µì…˜ í…ìŠ¤íŠ¸ ì»´í¬ë„ŒíŠ¸: " + currentOption.GetChild(0).GetComponent<TMP_Text>());
+                    currentOption.GetChild(0).GetComponent<TMP_Text>().text = qna[i].Answers[j];
                     if (qna[i].CorrectAnswer == j + 1)
                     {
-                        //´äÀÌ¸é correctAnswer ´Ş¾ÆÁÖ±â
+                        //ï¿½ï¿½ï¿½Ì¸ï¿½ correctAnswer ï¿½Ş¾ï¿½ï¿½Ö±ï¿½
                         currentOption.GetComponent<Button>().onClick.AddListener(SelectCorrectAnswer);
                     }
                     else
                     {
-                        //´äÀÌ¸é wrongAnswer ´Ş¾ÆÁÖ±â
+                        //ï¿½ï¿½ï¿½Ì¸ï¿½ wrongAnswer ï¿½Ş¾ï¿½ï¿½Ö±ï¿½
                         currentOption.GetComponent<Button>().onClick.AddListener(SelectWrongAnswer);
                     }
                 }
@@ -128,5 +131,6 @@ public class QuizSystem : MonoBehaviour
     public void SetQNA(List<QustionAndAnswers> qna)
     {
         this.qna = qna;
+        MakeQuiz();
     }
 }

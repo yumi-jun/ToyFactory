@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameFin.unity
     guid: e568c459f3ea16a4f95bb7904ff88a5e
+  - enabled: 1
+    path: Assets/Scenes/factory_asset_hy.unity
+    guid: 6b04185d37023f347b29e17475320e99
   m_configObjects: {}
