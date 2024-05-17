@@ -11,12 +11,14 @@ using System.IO;
 
 public class quizGenerator : MonoBehaviour
 {
-    public string inputLectureNoteStr;
+    private string inputLectureNoteStr;
     private OpenAIAPI openAIApi;
     [SerializeField] TMP_InputField quizNum;
     [SerializeField] TMP_Dropdown quizDropdown;
     private string gptKey, quizType;
     private string response;
+    [SerializeField] GameObject gameStartButton;
+    private bool init = false;
     
     private void Start()
     {
@@ -55,16 +57,22 @@ public class quizGenerator : MonoBehaviour
 
         chat.AppendSystemMessage("나는 대학교 강의노트의 내용을 퀴즈를 풀면서 공부하고 싶어. 너는 내가 제시한 지문을 바탕으로 퀴즈를 생성해주면 돼. 너의 대답에는 질문, 답, 해설 이 3가지가 필수로 포함되어야 해. 유형은 5지선다형 문제, ox 문제가 있어. 꼭 입력된 문제의 개수에 맞게 문제를 생성해야해."); //gpt에서 시스템으로서의 역할과 무엇을 해야하는지 세부적으로 설명
 
-        //유저랑 어시스턴트 대화 예시
-        chat.AppendUserInput("제시된 글을 바탕으로 문제를 2개 만들어줘");
-        chat.AppendExampleChatbotOutput("Q. 아주대의 마스코트 캐릭터는 누구일까요?\n\n a) 치토\nb) 기룡이\nc) 넙죽이\nd) 한양이\ne) 눈송이\n\nA. a)\n\n 해설: 아주대의 마스코트는 치토입니다." +
-            "\n\nQ. 아주대의 개교기념일은 언제인가요?\n\n a) 4월 11일\nb) 4월 12일\nc) 4월 13일\nd) 4월 14일\ne) 4월 15일\n\nA. a)\n\n 해설: 아주대의 개교기념일은 4월 12일입니다.");
-        //chat.AppendUserInput("제시된 글을 바탕으로 문제 2개를 만들어줘. 문제는 5지선다형 1개와 OX형 1개로 구성되어야 해.");
-        //chat.AppendExampleChatbotOutput("Q. 아주대의 마스코트 캐릭터는 누구일까요?\n\n a) 치토\nb) 기룡이\nc) 넙죽이\nd) 한양이\ne) 눈송이\n\nA. a)\n\n 해설: 아주대의 마스코트는 치토입니다.\n\n" +
-        //    "\n\nQ. 아주대 디지털미디어학과는 팔달관을 사용한다.\n\n A. X\n\n 해설: 아주대 디지털미디어학과는 산학원을 사용합니다.");
-        //Q. 질문   , a) b) c) d) e) , A. b)
+        if (init) {
+            init = true;
+            
 
-        await chat.GetResponseFromChatbotAsync();
+            //유저랑 어시스턴트 대화 예시
+            chat.AppendUserInput("치토는 아주대학교의 마스코트이고 기룡이는 경기대학교의 마스코트이다. 이 글을 바탕으로 문제를 1개 만들어줘. 문제의 유형을 5지선다형이고 답은 1개여야해.");
+            chat.AppendExampleChatbotOutput("Q. 아주대의 마스코트 캐릭터는 누구일까요?\n\n a) 치토\nb) 기룡이\nc) 넙죽이\nd) 한양이\ne) 눈송이\n\nA. a)\n\n 해설: 아주대의 마스코트는 치토입니다."
+                /*"\n\nQ. 아주대의 개교기념일은 언제인가요?\n\n a) 4월 11일\nb) 4월 12일\nc) 4월 13일\nd) 4월 14일\ne) 4월 15일\n\nA. a)\n\n 해설: 아주대의 개교기념일은 4월 12일입니다."*/);
+            //chat.AppendUserInput("제시된 글을 바탕으로 문제 2개를 만들어줘. 문제는 5지선다형 1개와 OX형 1개로 구성되어야 해.");
+            //chat.AppendExampleChatbotOutput("Q. 아주대의 마스코트 캐릭터는 누구일까요?\n\n a) 치토\nb) 기룡이\nc) 넙죽이\nd) 한양이\ne) 눈송이\n\nA. a)\n\n 해설: 아주대의 마스코트는 치토입니다.\n\n" +
+            //    "\n\nQ. 아주대 디지털미디어학과는 팔달관을 사용한다.\n\n A. X\n\n 해설: 아주대 디지털미디어학과는 산학원을 사용합니다.");
+            //Q. 질문   , a) b) c) d) e) , A. b)
+
+            await chat.GetResponseFromChatbotAsync();
+        }
+        
 
         //실제로 질문하는 부분
         if (quizDropdown.value != 2)
@@ -79,15 +87,22 @@ public class quizGenerator : MonoBehaviour
         Debug.Log(response);
         
         GameSceneUserDataManager.Instance().SetQuizString(response);
-        
 
-        foreach (ChatMessage msg in chat.Messages) {
-            Debug.Log($"{msg.Role}: {msg.TextContent}");
-        }
+
+        //foreach (ChatMessage msg in chat.Messages) {
+        //    Debug.Log($"{msg.Role}: {msg.TextContent}");
+        //}
+        Debug.Log(chat.Messages.Count);
+
+        gameStartButton.GetComponent<Button>().interactable = true;
     }
 
     public string GetQuizText()
     {
         return response;
+    }
+
+    public void setConvertedQuizText(string text) {
+        inputLectureNoteStr = text;
     }
 }
