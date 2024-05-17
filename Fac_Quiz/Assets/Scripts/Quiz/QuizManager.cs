@@ -14,19 +14,22 @@ public class QuizManager : MonoBehaviour
 
     public List<QustionAndAnswers> QnA;
 
-    public GameObject[] options;
+    //public GameObject[] options;
 
-    public int currentQuestion;
+    //public int currentQuestion;
 
-    public TextMeshProUGUI QuestionTxt;
+    //public TextMeshProUGUI QuestionTxt;
+
+    public QuizSystem quizSystem;
     
     // Start is called before the first frame update
     void Start()
     {
         QnA = new List<QustionAndAnswers>(); // QnA 리스트 초기화
         AddQuestions();
-        generateQuestion();
-        
+        quizSystem.SetQNA(QnA);
+        //generateQuestion();
+
     }
 
     public void AddQuestions()
@@ -103,12 +106,15 @@ public class QuizManager : MonoBehaviour
 
        
         
+
     }
+    /*
     public void Correct()
     {
         generateQuestion();
     }
 
+    
     void SetAnswer()
     {
         for (int i = 0; i < options.Length; i++)
@@ -147,6 +153,6 @@ public class QuizManager : MonoBehaviour
         
         QnA.RemoveAt(currentQuestion);
     }
-
+    */
     
 }

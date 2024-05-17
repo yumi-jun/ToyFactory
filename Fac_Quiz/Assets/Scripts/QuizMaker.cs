@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DefaultNamespace.Quiz;
+using TMPro;
 
 public class QuizMaker : MonoBehaviour
 {
-    [SerializeField] string quizType;
-    [SerializeField] GameObject multiplePrefab;
-    [SerializeField] GameObject oxPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +19,4 @@ public class QuizMaker : MonoBehaviour
         
     }
 
-    public void makeQuiz()
-    {
-        if (quizType.Equals("multiple"))
-        {
-            GameObject newQuiz= Instantiate(multiplePrefab, transform);
-        }
-    }
 }

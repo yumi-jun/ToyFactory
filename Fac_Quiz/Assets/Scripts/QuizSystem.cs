@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DefaultNamespace.Quiz;
+using TMPro;
+using UnityEngine.UI;
 
 public class QuizSystem : MonoBehaviour
 {
@@ -15,6 +18,12 @@ public class QuizSystem : MonoBehaviour
     private AudioSource errorSound;
     public GameObject conveyor;
     private bool isLastQuiz = false;
+
+    [SerializeField] string quizType = "multiple";
+    private List<QustionAndAnswers> qna = new List<QustionAndAnswers>();
+
+    [SerializeField] GameObject multiplePrefab;
+    [SerializeField] GameObject oxPrefab;
 
     [SerializeField]
     private int targetToyNum; //퀴즈 수에 따라 달라짐! 지금은 9문제니까 3문제에 하나가 생기므로 3개!
@@ -69,6 +78,41 @@ public class QuizSystem : MonoBehaviour
     public void MakeQuiz()
     {
         //자동으로 quiz 만들기
+        if (qna == null)
+            return;
+
+        if (quizType.Equals("multiple"))
+        {
+            for (int i = 0; i < qna.Count; i++)
+            {
+                GameObject newQuiz = Instantiate(multiplePrefab, transform);
+                //quiz question 지정
+                newQuiz.transform.GetChild(0).GetComponent<TMP_Text>().text = qna[i].Question;
+                //quiz answer 지정
+                for (int j = 0; j < qna[i].Answers.Length; j++)
+                {
+                    Transform currentOption = newQuiz.transform.GetChild(1).GetChild(j);
+                    currentOption.GetComponent<TMP_Text>().text = qna[i].Answers[j];
+                    if (qna[i].CorrectAnswer == j + 1)
+                    {
+                        //답이면 correctAnswer 달아주기
+                        currentOption.GetComponent<Button>().onClick.AddListener(SelectCorrectAnswer);
+                    }
+                    else
+                    {
+                        //답이면 wrongAnswer 달아주기
+                        currentOption.GetComponent<Button>().onClick.AddListener(SelectWrongAnswer);
+                    }
+                }
+
+                quizes.Add(newQuiz.transform);
+                if (i != 0)
+                {
+                    newQuiz.SetActive(false);
+                }
+
+            }
+        }
     }
 
     public int GetTargetToyNum()
@@ -79,5 +123,10 @@ public class QuizSystem : MonoBehaviour
     public bool GetIsLastQuiz()
     {
         return isLastQuiz;
+    }
+
+    public void SetQNA(List<QustionAndAnswers> qna)
+    {
+        this.qna = qna;
     }
 }

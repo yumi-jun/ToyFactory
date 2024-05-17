@@ -37,7 +37,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadQuizScene()
     {
-        SceneManager.LoadScene("QuizScene");
+        SceneManager.LoadScene("factory_assest_hy");
     }
     
     public void LoadFactoryScene()

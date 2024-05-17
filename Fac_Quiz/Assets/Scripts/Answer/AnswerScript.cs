@@ -14,7 +14,7 @@
             if (isCorrect)
             {
                 Debug.Log("Correct Answer");
-                quizmanager.Correct();
+                //quizmanager.Correct();
                 
             }
             else
