@@ -60,14 +60,8 @@ public class UploadQuiz : MonoBehaviour
         
         // "-" 기준으로 split 하여 배열에 저장
         List<string> Lists = quizQues.Split(new[] { "\n","\r" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        List<string> questionList = quizQues.Split(new[] { "Q." }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        Debug.Log(questionList.Count);
-
-        foreach (var q in questionList)
-        {
-            Debug.Log(q);
-        }
         
+        Debug.Log(quizQues);
         
         // 각 질문, 정답 옵션, 정답을 저장할 리스트
         
@@ -76,7 +70,7 @@ public class UploadQuiz : MonoBehaviour
        SceneLoader.Instance().LoadQuizScene();
        GameSceneUserDataManager.Instance().setQuizData(Lists);
         
-        
+       StartCoroutine(PostRequest(serverURL, quizQues, userid));   
 
 
     }
@@ -84,8 +78,10 @@ public class UploadQuiz : MonoBehaviour
     public void Report()
     {
         string quizQues = quizQuesInput.text;
-        
+
         StartCoroutine(PostRequest(serverURL, quizQues, userid));
+        
+        
     }
     string responseText;
 
@@ -128,20 +124,10 @@ public class UploadQuiz : MonoBehaviour
          
         }
     }
+    
 
-    public void SetQuizJsonData(String json)
-    {
-        
-        
-        
-    }
 
-    public void GetQuizJsonData()
-    {
-        
-    }
 
- 
 
     public void GetUserQuiz()
     {

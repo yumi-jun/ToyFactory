@@ -118,6 +118,7 @@ public class QuizManager : MonoBehaviour
             
             if(QnA[currentQuestion].CorrectAnswer==i+1)
             {
+                Debug.Log(QnA[currentQuestion].CorrectAnswer);
                 options[i].GetComponent<AnswerScript>().isCorrect = true;
             }
         }
@@ -147,9 +148,5 @@ public class QuizManager : MonoBehaviour
         QnA.RemoveAt(currentQuestion);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

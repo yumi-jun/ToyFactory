@@ -20,7 +20,7 @@
             else
             {
                 Debug.Log("Wrong Answer");
-                quizmanager.Correct();
+                //quizmanager.Correct();
             }
         }
     }

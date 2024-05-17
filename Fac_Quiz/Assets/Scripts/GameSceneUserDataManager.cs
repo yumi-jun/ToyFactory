@@ -88,7 +88,7 @@ public class GameSceneUserDataManager: MonoBehaviour
 
     public String GetQuizString()
     {
-        Debug.Log("quiz : "+QuizData);
+        //Debug.Log("quiz : "+QuizData);
         return QuizData;
     }
 
@@ -97,5 +97,71 @@ public class GameSceneUserDataManager: MonoBehaviour
         return QuestionData;
     }
     
+    public void AddQuestions()
+    {
+        List<String> ql = GameSceneUserDataManager.Instance().getQuizData();
+        
+        
+        List<string> questions = new List<string>();
+        List<string> options = new List<string>();
+        List<string> answers = new List<string>();
 
+        // 데이터 처리
+        string currentQuestion = "";
+        string currentOptions = "";
+        foreach (string line in ql)
+        {
+            if (line.StartsWith("Q."))
+            {
+                // 질문일 경우
+                currentQuestion = line;
+            }
+            else if (line.StartsWith("a)") || line.StartsWith("b)") || line.StartsWith("c)")|| line.StartsWith("d)")|| line.StartsWith("e)"))
+            {
+                // 정답 옵션일 경우
+                currentOptions = line + "\n";
+                options.Add(currentOptions);
+            }
+            else if (line.StartsWith("A."))
+            {
+                // 정답일 경우
+                questions.Add(currentQuestion);
+                answers.Add(line);
+                currentOptions = ""; // 옵션 초기화
+            }
+        }
+
+      
+
+        // 결과 출력
+        for (int i = 0; i < questions.Count; i++)
+        {
+            Debug.Log($"질문: {questions[i]}");
+            Debug.Log($"답변 옵션:\n{options[i]}");
+            Debug.Log($"정답: {answers[i]}\n");
+
+            int ca = 0;
+            if (answers[i].Contains("a"))
+            {
+                ca = 1;
+            }
+            else if (answers[i].Contains("b"))
+            {
+                ca = 2;
+
+            }
+            else if (answers[i].Contains("c"))
+            {
+                ca = 3;
+            }
+            else if (answers[i].Contains("d"))
+            {
+                ca = 4;
+            }
+            else if (answers[i].Contains("e"))
+            {
+                ca = 5;
+            }
+        }
+    }
 }
