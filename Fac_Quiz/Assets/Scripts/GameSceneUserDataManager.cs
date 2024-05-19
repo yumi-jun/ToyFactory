@@ -129,6 +129,10 @@ public class GameSceneUserDataManager: MonoBehaviour
                 answers.Add(line);
                 currentOptions = ""; // 옵션 초기화
             }
+            else if (line.StartsWith(" 해설"))
+            {
+                Debug.Log("해설 : "+line);
+            }
         }
 
       
