@@ -176,8 +176,8 @@ RectTransform:
   m_GameObject: {fileID: 706694305230922687}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.94002, y: 0.94559, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2085000343099092829}
   - {fileID: 2525108410940444498}
@@ -922,7 +922,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quiz
+  m_text: "\uC9C8\uBB38"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8038840a3625f414abee2bcb47ce48cc, type: 2}
   m_sharedMaterial: {fileID: -978517059824039036, guid: 8038840a3625f414abee2bcb47ce48cc, type: 2}
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -285.6786, y: -62.427948, z: -294.44235, w: 0}
+  m_margin: {x: -273.73346, y: -83.56247, z: -278.20963, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
