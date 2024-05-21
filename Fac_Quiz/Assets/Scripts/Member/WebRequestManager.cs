@@ -14,8 +14,7 @@ public class WebRequestManager : MonoBehaviour
     private string serverURL = "http://localhost:1234/members";
     private string serverLoginURL = "http://localhost:1234/member/login";
 
-
-
+    private String InterestCombine;
     public GameObject SignInCanvas;
     public GameObject SingUpCanvas;
     public GameObject MainCanvas;
@@ -25,10 +24,20 @@ public class WebRequestManager : MonoBehaviour
     {
         
     }
-    
-    public void SendDataToServer(String userlogin,String username,String password)
+
+    public void SetInterest(String s)
     {
-      string jsonData = "{\"userlogin\":\"" + userlogin + "\",\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
+        InterestCombine += s + " ";
+    }
+
+    public String GetInterest()
+    {
+        return InterestCombine;
+    }
+    
+    public void SendDataToServer(String userlogin,String username,String password,String interest)
+    {
+      string jsonData = "{\"userlogin\":\"" + userlogin + "\",\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"interest\":\""+ interest + "\"}";
         StartCoroutine(PostRequest(serverURL, jsonData));
     }
 

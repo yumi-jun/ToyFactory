@@ -35,7 +35,7 @@ public class ButtonManager : MonoBehaviour
             Debug.Log("데이터가 없다.");
             return;
         }
-        _webRequestManager.SendDataToServer(loginId.text,username.text,password.text);
+        _webRequestManager.SendDataToServer(loginId.text,username.text,password.text,_webRequestManager.GetInterest());
     }
 
     public void getMemberList()
