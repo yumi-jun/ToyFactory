@@ -38,9 +38,9 @@ public class UploadQuiz : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LecNameList = null;
+        LecNameList = new List<string>();
         userid = GameSceneUserDataManager.Instance().GetUserdata().id;
-        _quizGenerator = FindObjectOfType<quizGenerator>();
+        
     }
 
     // Update is called once per frame
