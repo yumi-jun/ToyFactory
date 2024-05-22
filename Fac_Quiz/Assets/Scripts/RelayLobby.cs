@@ -15,15 +15,31 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using WebSocketSharp;
 using TMPro;
+using Newtonsoft.Json.Linq;
 
 public class RelayLobby : MonoBehaviour
 {
     private List<Lobby> lobbyList;
-    [SerializeField] GameObject lobbyButton, contentView, LobbyCreationPanel, InLobbyPenel, LobbyListPenel, gameStartButton;
+    [SerializeField] GameObject lobbyButton, contentView, LobbyCreationPanel, InLobbyPenel, LobbyListPenel, gameStartButton, lobbyPWUI, clientLobbyPWUI;
+    [SerializeField] Toggle lobbyToggle;
+    [SerializeField] TMP_InputField lobbyNameInput, passwordInput, clientPasswordInput;
     private string myLobbyId;
+    private bool isReady;
+    private Lobby lobbyTryToEnter;
 
     void Start()
     {
+        lobbyPWUI.SetActive(false);
+        clientLobbyPWUI.SetActive(false);
+        lobbyToggle.onValueChanged.AddListener((bool isPrivate) => {
+            if (isPrivate)
+            {
+                lobbyPWUI.SetActive(true);
+            }
+            else {
+                lobbyPWUI.SetActive(false);
+            }
+        });
         init();
     }
 
@@ -46,11 +62,20 @@ public class RelayLobby : MonoBehaviour
 
     private async void createLobby(string joincode) {
 
-        string lobbyName = "new Lobby";
+        string lobbyName = lobbyNameInput.text;
         int maxPlayer = 2;
 
         CreateLobbyOptions options = new CreateLobbyOptions();
-        options.IsPrivate = false;
+
+        if (lobbyToggle.isOn)
+        {
+            options.IsPrivate = true;
+            options.Password = passwordInput.text; //8~64자여야함
+        }
+        else {
+            options.IsPrivate = false;
+        }
+
         options.Data = new Dictionary<string, DataObject>() {
             { 
                 "relayJoinCode", new DataObject(
@@ -62,6 +87,7 @@ public class RelayLobby : MonoBehaviour
 
         Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, options);
         myLobbyId = lobby.Id;
+        isReady = false;
         StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
         Debug.Log(lobby.LobbyCode);
 
@@ -69,15 +95,26 @@ public class RelayLobby : MonoBehaviour
         NetworkManager.Singleton.StartHost();
         LobbyCreationPanel.SetActive(false);
         InLobbyPenel.SetActive(true);
+        lobbyNameInput.text = "";
+        passwordInput.text = "";
+        lobbyToggle.isOn = false;
     }
 
-    public async void joinLobby(string joinCode, string lobbyId) {
+    public async void joinLobby(string joinCode, Lobby lobby) {
         JoinAllocation allocation = await Unity.Services.Relay.Relay.Instance.JoinAllocationAsync(joinCode);
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
 
         try {
-            await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-            myLobbyId = lobbyId;
+
+            if (lobby.IsPrivate)
+            {
+                var idOptions = new JoinLobbyByIdOptions { Password = clientPasswordInput.text };
+                await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id, idOptions);
+            }
+            else {
+                await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id);
+            }
+            myLobbyId = lobby.Id;
             gameStartButton.GetComponent<Button>().interactable = true;
             gameStartButton.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Ready";
             NetworkManager.Singleton.StartClient();
@@ -124,7 +161,14 @@ public class RelayLobby : MonoBehaviour
                 newBtn.transform.SetParent(contentView.transform);
                 newBtn.GetComponent<Button>().onClick.AddListener(() => {
                     Debug.Log(lobbyList[tempNum].Id);
-                    joinLobby(lobbyList[tempNum].Data["relayJoinCode"].Value, lobbyList[tempNum].Id);
+                    if (lobbyList[tempNum].IsPrivate)
+                    {
+                        clientLobbyPWUI.SetActive(true);
+                        lobbyTryToEnter = lobbyList[tempNum];
+                    }
+                    else {
+                        joinLobby(lobbyList[tempNum].Data["relayJoinCode"].Value, lobbyList[tempNum]);
+                    }
                 });
             }
 
@@ -132,6 +176,13 @@ public class RelayLobby : MonoBehaviour
         catch (LobbyServiceException e) {
             Debug.Log(e);
         }
+    }
+
+    public void checkPassword() {
+        joinLobby(lobbyTryToEnter.Data["relayJoinCode"].Value, lobbyTryToEnter);
+        clientPasswordInput.text = "";
+        clientLobbyPWUI.SetActive(false);
+        lobbyTryToEnter = null;
     }
 
     public async void leaveLobby()
@@ -178,5 +229,10 @@ public class RelayLobby : MonoBehaviour
             LobbyService.Instance.DeleteLobbyAsync(myLobbyId);
             myLobbyId = "";
         }
+    }
+
+    public void closePanel() { 
+        clientLobbyPWUI.SetActive(false);
+        lobbyTryToEnter = null;
     }
 }
