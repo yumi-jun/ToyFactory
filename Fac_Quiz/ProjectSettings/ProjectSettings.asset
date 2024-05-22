@@ -750,11 +750,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 98630885-cc5d-4c8b-ba9d-7c1cd5332513
+  cloudProjectId: 5b922ada-073d-49ce-b2df-64658399d365
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: FacQuiz
-  organizationId: leesysy
+  projectName: Fac_Quiz
+  organizationId: yumijun
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

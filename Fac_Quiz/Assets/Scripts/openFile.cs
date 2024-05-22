@@ -13,7 +13,7 @@ public class openFile : MonoBehaviour
         string[] paths = StandaloneFileBrowser.OpenFilePanel("", "", "pdf", false);
 
         parsedFilePath = paths[0].Split('\\');
-        selectedFileTitle.GetComponent<TextMeshProUGUI>().text = "ÆÄÀÏ ÀÌ¸§: " + parsedFilePath[parsedFilePath.Length-1];
+        selectedFileTitle.GetComponent<TextMeshProUGUI>().text = "íŒŒì¼ ì´ë¦„: " + parsedFilePath[parsedFilePath.Length-1];
         GameSceneUserDataManager.Instance().setFileName(parsedFilePath[parsedFilePath.Length - 1]);
 
         converter.GetComponent<iTextSharpConverter>().convertPdfToText(paths[0]);

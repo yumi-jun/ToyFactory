@@ -73,7 +73,7 @@ public class UploadQuiz : MonoBehaviour
        SceneLoader.Instance().LoadQuizScene();
        GameSceneUserDataManager.Instance().setQuizData(Lists);
         
-       StartCoroutine(PostRequest(serverURL, quizQues, userid));   
+       StartCoroutine(PostRequest(serverURL, quizQues, GameSceneUserDataManager.Instance().getFileName(),userid));   
 
 
     }
@@ -89,12 +89,13 @@ public class UploadQuiz : MonoBehaviour
     string responseText;
 
     // 서버에 POST 요청을 보내는 메서드
-    IEnumerator PostRequest(string url, string quizQues, int userId)
+    IEnumerator PostRequest(string url, string quizQues,string LecName, int userId)
     {
         // 요청 데이터 생성
         WWWForm form = new WWWForm();
         form.AddField("quizQues", quizQues);
         form.AddField("id", userId.ToString()); // 사용자 id 추가
+        form.AddField("lectureName",LecName);
 
         // POST 요청 보내기
         UnityWebRequest www = UnityWebRequest.Post(url, form);

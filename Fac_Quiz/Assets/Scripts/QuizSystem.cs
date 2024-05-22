@@ -20,7 +20,7 @@ public class QuizSystem : MonoBehaviour
     private bool isLastQuiz = false;
 
     [SerializeField] string quizType = "multiple";
-    private List<QustionAndAnswers> qna = new List<QustionAndAnswers>();
+    private List<QustionAndAnswers> qna;
 
     [SerializeField] GameObject multiplePrefab;
     [SerializeField] GameObject oxPrefab;
@@ -96,6 +96,8 @@ public class QuizSystem : MonoBehaviour
                     Debug.Log("생성될 옵션: " + qna[i].Answers[j]);
                     Debug.Log("옵션 텍스트 컴포넌트: " + currentOption.GetChild(0).GetComponent<TMP_Text>());
                     currentOption.GetChild(0).GetComponent<TMP_Text>().text = qna[i].Answers[j];
+                    
+                    Debug.Log("i 와 j "+i+j+" "+qna[i].CorrectAnswer);
                     if (qna[i].CorrectAnswer == j + 1)
                     {
                         //���̸� correctAnswer �޾��ֱ�
