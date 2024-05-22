@@ -1220,7 +1220,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: IT
+          m_StringArgument: "\uC74C\uC545"
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &470836287
@@ -1454,8 +1454,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uACBD\uC81C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8038840a3625f414abee2bcb47ce48cc, type: 2}
+  m_sharedMaterial: {fileID: -978517059824039036, guid: 8038840a3625f414abee2bcb47ce48cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2248,7 +2248,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: IT
+          m_StringArgument: "\uACBD\uC81C"
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &802526455
@@ -7462,7 +7462,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: IT
+          m_StringArgument: "\uC5ED\uC0AC"
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2077254365

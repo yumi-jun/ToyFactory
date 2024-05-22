@@ -27,15 +27,18 @@ public class UploadQuiz : MonoBehaviour
 
     private quizGenerator _quizGenerator;
     
-    public TMP_InputField quizQuesInput;
+    //public TMP_InputField quizQuesInput;
 
     private int userid;
 
     private string json;
 
+    private List<String> LecNameList;
+
     // Start is called before the first frame update
     void Start()
     {
+        LecNameList = null;
         userid = GameSceneUserDataManager.Instance().GetUserdata().id;
         _quizGenerator = FindObjectOfType<quizGenerator>();
     }
@@ -77,9 +80,9 @@ public class UploadQuiz : MonoBehaviour
 
     public void Report()
     {
-        string quizQues = quizQuesInput.text;
+        //tring quizQues = quizQuesInput.text;
 
-        StartCoroutine(PostRequest(serverURL, quizQues, userid));
+        //tartCoroutine(PostRequest(serverURL, quizQues, userid));
         
         
     }
@@ -125,10 +128,6 @@ public class UploadQuiz : MonoBehaviour
         }
     }
     
-
-
-
-
     public void GetUserQuiz()
     {
         string serverURL = "http://localhost:1234/quiz/" +
@@ -167,15 +166,19 @@ public class UploadQuiz : MonoBehaviour
                 Debug.Log("id: " + quiz.quizid);
                 Debug.Log("lecture name: " + quiz.lectureName);
                 Debug.Log("quiz question: " + quiz.quizQues);
+                
+                LecNameList.Add(quiz.lectureName);
+                
             }
-
-
-
-           
             
-            
+            Debug.Log("lecname :"+ LecNameList.Count);
 
         }
+    }
+
+    public List<String> GetUserQuizData()
+    {
+        return LecNameList;
     }
 }
     

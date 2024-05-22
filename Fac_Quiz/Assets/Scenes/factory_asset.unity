@@ -588,7 +588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &325487752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -929,6 +929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 509802557}
   - component: {fileID: 509802558}
+  - component: {fileID: 509802559}
   m_Layer: 0
   m_Name: GameSceneQuizData
   m_TagString: Untagged
@@ -961,6 +962,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0727641709f47ee4eb8c4d5cb38e2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &509802559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509802555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5328b18b279f5ac48ac3a29a47f17cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &718384871

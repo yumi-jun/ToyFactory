@@ -25,6 +25,8 @@ public class GameSceneUserDataManager: MonoBehaviour
     private List<String> QuestionData;
 
     private String QuizData;
+
+    private List<String> userQuizList;
     private GameSceneUserDataManager() {
         // 생성자는 외부에서 호출못하게 private 으로 지정해야 한다.
     }
@@ -65,6 +67,16 @@ public class GameSceneUserDataManager: MonoBehaviour
 
        
         
+    }
+
+    public void SetUserQuizList(List<String> list)
+    {
+        userQuizList = list;
+    }
+
+    public List<String> GetUserQuizList()
+    {
+        return userQuizList;
     }
 
     public UserData GetUserdata()
