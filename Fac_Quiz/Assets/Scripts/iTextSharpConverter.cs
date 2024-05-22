@@ -12,6 +12,7 @@ public class iTextSharpConverter : MonoBehaviour
     [SerializeField] GameObject quizMaker;
 
     public void convertPdfToText(string path) {
+        result = string.Empty;
         PdfReader pdfReader = new PdfReader(path.ToString());
         Debug.Log(pdfReader.NumberOfPages);
         for (int i = 1; i <= pdfReader.NumberOfPages; i++)
@@ -21,6 +22,6 @@ public class iTextSharpConverter : MonoBehaviour
 
         Debug.Log(result);
         GUIUtility.systemCopyBuffer = result;
-        quizMaker.GetComponent<quizGenerator>().inputLectureNoteStr = result;
+        quizMaker.GetComponent<quizGenerator>().setConvertedQuizText(result);
     }
 }

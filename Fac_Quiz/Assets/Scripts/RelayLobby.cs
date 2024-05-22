@@ -11,11 +11,16 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
 using Unity.Services.Lobbies.Models;
 using UnityEngine.UI;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using WebSocketSharp;
+using TMPro;
 
 public class RelayLobby : MonoBehaviour
 {
     private List<Lobby> lobbyList;
-    [SerializeField] GameObject lobbyButton, contentView;
+    [SerializeField] GameObject lobbyButton, contentView, LobbyCreationPanel, InLobbyPenel, LobbyListPenel, gameStartButton;
+    private string myLobbyId;
 
     void Start()
     {
@@ -56,10 +61,14 @@ public class RelayLobby : MonoBehaviour
         };
 
         Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, options);
+        myLobbyId = lobby.Id;
+        StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
         Debug.Log(lobby.LobbyCode);
 
+        gameStartButton.GetComponent<Button>().interactable = false;
         NetworkManager.Singleton.StartHost();
-        gameObject.SetActive(false);
+        LobbyCreationPanel.SetActive(false);
+        InLobbyPenel.SetActive(true);
     }
 
     public async void joinLobby(string joinCode, string lobbyId) {
@@ -68,8 +77,12 @@ public class RelayLobby : MonoBehaviour
 
         try {
             await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+            myLobbyId = lobbyId;
+            gameStartButton.GetComponent<Button>().interactable = true;
+            gameStartButton.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Ready";
             NetworkManager.Singleton.StartClient();
-            gameObject.SetActive(false);
+            LobbyCreationPanel.SetActive(false);
+            InLobbyPenel.SetActive(true);
         }
         catch (LobbyServiceException e) {
             Debug.Log(e);
@@ -103,6 +116,8 @@ public class RelayLobby : MonoBehaviour
 
             int tempNum = 0;
 
+            if (lobbyList.Count == 0) Debug.Log("존재하는 로비가 없습니다.");
+
             for (int i = 0; i < lobbyList.Count; i++) {
                 tempNum = i;
                 GameObject newBtn = Instantiate(lobbyButton);
@@ -116,6 +131,52 @@ public class RelayLobby : MonoBehaviour
         }
         catch (LobbyServiceException e) {
             Debug.Log(e);
+        }
+    }
+
+    public async void leaveLobby()
+    {
+        try
+        {
+            if (NetworkManager.Singleton.IsHost)
+            {
+                string playerId = AuthenticationService.Instance.PlayerId;
+                await LobbyService.Instance.RemovePlayerAsync(myLobbyId, playerId);
+                //await LobbyService.Instance.DeleteLobbyAsync(myLobbyId);
+            }
+            else {
+                //var lobbyId = await LobbyService.Instance.GetJoinedLobbiesAsync();
+                string playerId = AuthenticationService.Instance.PlayerId;
+                await LobbyService.Instance.RemovePlayerAsync(myLobbyId, playerId);
+            }
+            InLobbyPenel.SetActive(false);
+            LobbyListPenel.SetActive(true);
+            myLobbyId = "";
+        }
+        catch (LobbyServiceException e) {
+            Debug.Log(e);
+        }
+    }
+
+    IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds) {
+
+        var delay = new WaitForSeconds(waitTimeSeconds);
+
+        while (true) {
+            LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
+            yield return delay;
+        }
+    }
+
+    //ConcurrentQueue<string> createdLobbyIds = new ConcurrentQueue<string>();
+
+    private void OnApplicationQuit()
+    {
+        if (!myLobbyId.IsNullOrEmpty() /*&& NetworkManager.Singleton.IsHost*/)
+        {
+            Debug.Log("로비 삭제 중");
+            LobbyService.Instance.DeleteLobbyAsync(myLobbyId);
+            myLobbyId = "";
         }
     }
 }
