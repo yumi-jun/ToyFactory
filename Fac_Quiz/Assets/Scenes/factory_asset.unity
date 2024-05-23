@@ -847,7 +847,6 @@ GameObject:
   - component: {fileID: 325487753}
   - component: {fileID: 325487752}
   - component: {fileID: 325487756}
-  - component: {fileID: 325487757}
   m_Layer: 5
   m_Name: QuizSettingCanvas
   m_TagString: Untagged
@@ -953,18 +952,6 @@ MonoBehaviour:
   quizNum: {fileID: 932194338}
   quizDropdown: {fileID: 2017756288}
   gameStartButton: {fileID: 1862215752}
---- !u!114 &325487757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 325487751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5328b18b279f5ac48ac3a29a47f17cb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &332407082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,6 +1547,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5328b18b279f5ac48ac3a29a47f17cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contentPanel: {fileID: 1361005104}
+  quizItemPrefab: {fileID: 7242794668381250750, guid: cbfcaf43e4ad91d40b165683f190d30e, type: 3}
+  quizItems: []
 --- !u!1 &547205541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,21 +2180,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1329797753}
-        m_TargetAssemblyTypeName: LobbyUIManager, Assembly-CSharp
-        m_MethodName: showInLobbyPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 325487757}
+      - m_Target: {fileID: 509802559}
         m_TargetAssemblyTypeName: UploadQuiz, Assembly-CSharp
-        m_MethodName: StartQuiz
+        m_MethodName: Report
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2288,7 +2266,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 295, y: -137}
+  m_AnchoredPosition: {x: 230, y: -137}
   m_SizeDelta: {x: 160, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &723908536
@@ -6828,6 +6806,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330103557}
   m_CullTransparentMesh: 1
+--- !u!1 &1331517886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1331517888}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1331517888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331517886}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 589.8037, y: 230.01547, z: 50.339233}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1344348052
 GameObject:
   m_ObjectHideFlags: 0
@@ -6921,6 +6930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1361005104}
   - component: {fileID: 1361005105}
+  - component: {fileID: 1361005106}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -6944,8 +6954,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -392, y: 0}
-  m_SizeDelta: {x: 784, y: 0}
+  m_AnchoredPosition: {x: -209, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1361005105
 MonoBehaviour:
@@ -6973,6 +6983,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1361005106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361005103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1392343060
 GameObject:
   m_ObjectHideFlags: 0
@@ -8880,6 +8904,18 @@ MonoBehaviour:
           m_StringArgument: GameScene
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 509802559}
+        m_TargetAssemblyTypeName: UploadQuiz, Assembly-CSharp
+        m_MethodName: StartQuiz
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1862215755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9738,7 +9774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 305, y: -139}
+  m_AnchoredPosition: {x: 229, y: -89}
   m_SizeDelta: {x: 160, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2047984535
@@ -10114,3 +10150,4 @@ SceneRoots:
   - {fileID: 1799522582}
   - {fileID: 325487755}
   - {fileID: 509802557}
+  - {fileID: 1331517888}

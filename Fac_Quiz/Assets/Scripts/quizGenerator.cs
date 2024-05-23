@@ -7,6 +7,8 @@ using OpenAI_API.Models;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using OpenAI_API.Completions;
+using UnityEngine.Networking;
 
 
 public class quizGenerator : MonoBehaviour
@@ -21,14 +23,17 @@ public class quizGenerator : MonoBehaviour
     private bool init = false;
 
     private UploadQuiz _upload;
+    private OpenAIAPI openAIApi_server;
+    
+    private string apiKey;
     
     private void Start()
     {
         FileInfo fileInfo = new FileInfo("./chatGPT_API_Key.txt");
         _upload = FindObjectOfType<UploadQuiz>();
-        
         if (fileInfo.Exists)
         {
+            Debug.Log("File IS EXIT");
             StreamReader reader = new StreamReader("./chatGPT_API_Key.txt");
             gptKey = reader.ReadToEnd();
             reader.Close();
@@ -38,8 +43,65 @@ public class quizGenerator : MonoBehaviour
         }
 
         openAIApi = new OpenAIAPI(gptKey);
-    }
+        //openAIApi = new OpenAIAPI(gptKey);
+        StartCoroutine(GetApiKeyCoroutine());
 
+    }
+    IEnumerator GetApiKeyCoroutine()
+    {
+        Debug.Log("Connecting to server to retrieve the API key.");
+        string url = "http://localhost:1234/api-key";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            // Send the request and wait for a response
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                // Get the API key from the response
+                apiKey = webRequest.downloadHandler.text;
+                Debug.Log("API Key: " + apiKey);
+
+                // Initialize the OpenAIAPI object with the received API key
+                openAIApi_server = new OpenAIAPI(apiKey);
+
+                // Example usage: Call the ChatGPT API
+                StartCoroutine(CallChatGptApiCoroutine("Your prompt here"));
+            }
+        }
+    }
+    
+    
+    IEnumerator CallChatGptApiCoroutine(string prompt)
+    {
+        // Assuming OpenAIAPI SDK has a method to create requests and get responses.
+        var request = new CompletionRequest
+        {
+            Prompt = prompt,
+            MaxTokens = 100
+        };
+
+        var responseTask = openAIApi_server.Completions.CreateCompletionAsync(request);
+
+        while (!responseTask.IsCompleted)
+        {
+            yield return null;
+        }
+
+        if (responseTask.IsFaulted)
+        {
+            Debug.LogError("Error: " + responseTask.Exception);
+        }
+        else
+        {
+            var response = responseTask.Result;
+            //Debug.Log("Response: " + response.Choices[0].Text);
+        }
+    }
     public async void makeQuiz() {
 
         if (string.IsNullOrWhiteSpace(inputLectureNoteStr)) {
@@ -49,12 +111,16 @@ public class quizGenerator : MonoBehaviour
         if (string.IsNullOrWhiteSpace(quizNum.text)) {
             Debug.Log("생성될 문제의 개수를 입력해주세요.");
             return;
+        } 
+        if (openAIApi_server == null) {
+            Debug.LogError("OpenAIApi_server is not initialized.");
         }
 
         Debug.Log("퀴즈 개수: " + quizNum.text);
         Debug.Log("선택된 옵션" + quizDropdown.options[quizDropdown.value].text);
 
         var chat = openAIApi.Chat.CreateConversation();
+//        var chat1 = openAIApi_server.Chat.CreateConversation();
         chat.Model = Model.ChatGPTTurbo;
         chat.RequestParameters.Temperature = 0.7f; //값이 높을 수록 답이 창의적으로 나오지만 리스크가 큼
 
@@ -92,9 +158,23 @@ public class quizGenerator : MonoBehaviour
         //}
         //Debug.Log(chat.Messages.Count);
 
-        gameStartButton.GetComponent<Button>().interactable = true;
+        if (gameStartButton != null)
+        {
+            gameStartButton.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            Debug.LogError("Game start button is not assigned.");
+        }
         
-        _upload.StartQuiz();
+        if (_upload != null)
+        {
+            _upload.Report();
+        }
+        else
+        {
+            Debug.LogError("UploadQuiz instance is not assigned.");
+        }
     }
 
     public string GetQuizText()

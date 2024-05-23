@@ -23,6 +23,9 @@ public class QuizEntity
 public class UploadQuiz : MonoBehaviour
 {
 
+    public RectTransform contentPanel;
+    public GameObject quizItemPrefab;
+    
     private string serverURL = "http://localhost:1234/quiz";
 
     private quizGenerator _quizGenerator;
@@ -34,6 +37,8 @@ public class UploadQuiz : MonoBehaviour
     private string json;
 
     private List<String> LecNameList;
+    
+    public List<QuizItem> quizItems = new List<QuizItem>();
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +87,7 @@ public class UploadQuiz : MonoBehaviour
     {
         //tring quizQues = quizQuesInput.text;
 
-        //tartCoroutine(PostRequest(serverURL, quizQues, userid));
+        StartCoroutine(PostRequest(serverURL, GameSceneUserDataManager.Instance().GetQuizString(), GameSceneUserDataManager.Instance().getFileName(),userid));   
         
         
     }
@@ -142,7 +147,7 @@ public class UploadQuiz : MonoBehaviour
 
     IEnumerator GetQuizzes(String url)
     {
-        
+        LecNameList = new List<string>();
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
 
@@ -158,15 +163,15 @@ public class UploadQuiz : MonoBehaviour
             QuizEntityList quizEntities = JsonUtility.FromJson<QuizEntityList>("{\"quizzes\":" + www.downloadHandler.text + "}");
 
             
-            Debug.Log(www.downloadHandler.text);
+//            Debug.Log(www.downloadHandler.text);
             
             
             // 받은 퀴즈 리스트를 처리 (예: 각 퀴즈별로 로그로 출력)
             foreach (var quiz in quizEntities.quizzes)
             {
-                Debug.Log("id: " + quiz.quizid);
-                Debug.Log("lecture name: " + quiz.lectureName);
-                Debug.Log("quiz question: " + quiz.quizQues);
+//                Debug.Log("id: " + quiz.quizid);
+               // Debug.Log("lecture name: " + quiz.lectureName);
+               // Debug.Log("quiz question: " + quiz.quizQues);
                 
                 LecNameList.Add(quiz.lectureName);
                 
@@ -174,6 +179,22 @@ public class UploadQuiz : MonoBehaviour
             
             Debug.Log("lecname :"+ LecNameList.Count);
 
+            PopulateQuiz();
+
+        }
+    }
+    
+    public void PopulateQuiz()
+    {
+        quizItems.Clear();
+        Debug.Log("Open"+LecNameList.Count);
+        for (int i = 0; i < LecNameList.Count; i += 1)
+        {
+            GameObject newItem = Instantiate(quizItemPrefab, contentPanel);
+            QuizItem quizItem = newItem.GetComponent<QuizItem>();
+            quizItem.Setup(LecNameList[i]);
+            quizItems.Add(quizItem);
+            Debug.Log("i "+ i);
         }
     }
 
